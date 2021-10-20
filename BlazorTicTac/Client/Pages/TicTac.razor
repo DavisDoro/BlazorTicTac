@@ -105,6 +105,7 @@
     private bool invalidMove = false;
     private int[] gameField = new int[] { 0, 0, 0, 0, 0, 2, 0, 0, 0 };
     private int lastMove = 10;
+
     public void Mark(int value, int playerId)
     {
         if (gameField[value] == 1 || gameField[value] == 2)
@@ -124,8 +125,6 @@
 
     public void ConfirmMove(int value)
     {
-        //FieldService.ConfirmFields(value);
-        Console.WriteLine("Confirm move");
         if (lastMove == 10)
         {
             invalidMove = true;
@@ -135,12 +134,10 @@
         if (playerId == 1)
         {
             playerId = 2;
-
         }
         else
         {
             playerId = 1;
-
         }
     }
 }
