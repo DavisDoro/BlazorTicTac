@@ -1,0 +1,146 @@
+﻿@page "/tictac"
+@inject IFieldService FieldService
+
+<h3>TicTac</h3>
+<div></div>
+<table class="table table-hover" width=600px>
+
+    <tr>
+
+        <td width="200px" @onclick="() => Mark(0, playerId)">
+            @switch (gameField[0])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+
+        </td>
+        <td width="200px" @onclick="() => Mark(1, playerId)">
+            @switch (gameField[1])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+        </td>
+        <td width="200px" @onclick="() => Mark(2, playerId)">
+            @switch (gameField[2])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+        </td>
+
+    </tr>
+
+    <tr>
+        <td width="200px" @onclick="() => Mark(3, playerId)">
+            @switch (gameField[3])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+        </td>
+        <td width="200px" @onclick="() => Mark(4, playerId)">
+            @switch (gameField[4])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+        </td>
+        <td width="200px" @onclick="() => Mark(5, playerId)">
+            @switch (gameField[5])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+        </td>
+    </tr>
+    <tr>
+        <td width="200px" @onclick="() => Mark(6, playerId)">
+            @switch (gameField[6])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+        </td>
+        <td width="200px" @onclick="() => Mark(7, playerId)">
+            @switch (gameField[7])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+        </td>
+        <td width="200px" @onclick="() => Mark(8, playerId)">
+            @switch (gameField[8])
+            {
+                case 0:<img src="icons/none.png" /> break;
+                case 1: <img src="icons/cross.png" />break;
+                case 2: <img src="icons/null.png" />break;
+            }
+        </td>
+    </tr>
+</table>
+<div class="card-subtitle">Next move player @playerId</div>
+<br />
+<button class="btn btn-primary" @onclick="() => ConfirmMove(lastMove)"> Confirm</button>
+
+@if (invalidMove)
+{
+    <div class="validation-message">
+        Not valid move!
+    </div>
+}
+
+
+@code {
+    private int playerId = 1;
+    private bool invalidMove = false;
+    private int[] gameField = new int[] { 0, 0, 0, 0, 0, 2, 0, 0, 0 };
+    private int lastMove = 10;
+    public void Mark(int value, int playerId)
+    {
+        if (gameField[value] == 1 || gameField[value] == 2)
+        {
+            return;
+        }
+        if (lastMove < 9)
+        {
+            gameField[lastMove] = 0;
+        }
+
+        gameField[value] = playerId;
+        lastMove = value;
+        invalidMove = false;
+    }
+
+
+    public void ConfirmMove(int value)
+    {
+        //FieldService.ConfirmFields(value);
+        Console.WriteLine("Confirm move");
+        if (lastMove == 10)
+        {
+            invalidMove = true;
+            return;
+        }
+        lastMove = 10;
+        if (playerId == 1)
+        {
+            playerId = 2;
+
+        }
+        else
+        {
+            playerId = 1;
+
+        }
+    }
+}
