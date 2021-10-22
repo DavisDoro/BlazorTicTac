@@ -2,76 +2,86 @@
 {
     public class TTLogic
     {
-        public int playerId = 1;
-        public bool winner = false;
-        public bool invalidMove = false;
-        public int[,] gameField = new int[3, 3] {
+        public TTLogic()
+        {
+            PlayerId = 1;
+        }
+        public int PlayerId { get; set; }
+        public bool Winner { get; set; }
+        public bool InvalidMove { get; set; }
+        public int[,] GameField { get; set; } = new int[3, 3] {
             { 0, 0, 0 },
             { 0, 0, 0, },
-            { 0, 0, 0, }
-        };
+            { 0, 0, 0, } };
+        public bool LastMove { get; set; }
+        public int LastRow { get; set; }
+        public int LastCol { get; set; }
+        public int Count { get; set; } = 0;
 
-        public bool lastMove = false;
-        int lastRow;
-        int lastCol;
-        int count = 0;
 
-        public void Mark(int row, int col, int playerId)  // validate and place your mark on board
+    public void Mark(int row, int col, int playerId)  // validate and place your mark on board
         {
-            if (winner)
+            if (Winner)
             {
                 return;
             }
-            if (gameField[row, col] == 1 || gameField[row, col] == 2)
+            if (GameField[row, col] == 1 || GameField[row, col] == 2)
             {
                 return;
             }
-            if (lastMove) // reset previous field on board if player chose multiple
+            if (LastMove) // reset previous field on board if player chose multiple
             {
-                gameField[lastRow, lastCol] = 0;
+                GameField[LastRow, LastCol] = 0;
             }
 
-            gameField[row, col] = playerId;
+            GameField[row, col] = playerId;
 
-            lastMove = true;    
-            invalidMove = false;
+            LastMove = true;    
+            InvalidMove = false;
 
-            lastRow = row;   //obtain last selected cell
-            lastCol = col;
+            LastRow = row;   //obtain last selected cell
+            LastCol = col;
         }
 
         public void ConfirmMove() // confirm button
         {
-            if (!lastMove)
+            if (!LastMove)
             {
-                invalidMove = true;
+                InvalidMove = true;
                 return;
             }
-            lastMove = false;
-            if (HasWon(playerId))
+            LastMove = false;
+            if (HasWon(PlayerId))
             {
-                winner = true;
+                Winner = true;
                 return;
             }
-            if (playerId == 1)
+            if (PlayerId == 1)
             {
-                playerId = 2;
+                PlayerId = 2;
             }
             else
             {
-                playerId = 1;
+                PlayerId = 1;
             }
-
         }
 
         public void Reset() // reset game board
         {
-            gameField = new int[3, 3] {
+            GameField = new int[3, 3] {
             { 0, 0, 0 },
             { 0, 0, 0, },
             { 0, 0, 0, }
             };  
-            winner = false;
+            Winner = false;
+            if (PlayerId == 1)
+            {
+                PlayerId = 2;
+            }
+            else
+            {
+                PlayerId= 1;
+            }
         }
         public bool HasWon(int playerId) // check for winner
         {
@@ -88,17 +98,17 @@
 
                 for (int j = 0; j < 3; j++)
                 {
-                    if (gameField[i, j] == playerId)
+                    if (GameField[i, j] == playerId)
                     {
-                        count++;
+                        Count++;
                     }
-                    if (count == 3)
+                    if (Count == 3)
                     {
-                        count = 0;
+                        Count = 0;
                         return true;
                     }
                 }
-                count = 0;
+                Count = 0;
             }
             return false;
         }
@@ -110,17 +120,17 @@
 
                 for (int j = 0; j < 3; j++)
                 {
-                    if (gameField[j, i] == playerId)
+                    if (GameField[j, i] == playerId)
                     {
-                        count++;
+                        Count++;
                     }
-                    if (count == 3)
+                    if (Count == 3)
                     {
-                        count = 0;
+                        Count = 0;
                         return true;
                     }
                 }
-                count = 0;
+                Count = 0;
             }
             return false;
         }
@@ -130,30 +140,30 @@
         {
             for (int i = 0; i < 3; i++) //diag one
             {
-                if (gameField[i, i] == playerId)
+                if (GameField[i, i] == playerId)
                 {
-                    count++;
+                    Count++;
                 }
-                if (count == 3)
+                if (Count == 3)
                 {
-                    count = 0;
+                    Count = 0;
                     return true;
                 }
             }
             int h = 2;
-            count = 0;
+            Count = 0;
 
             for (int i = 0; i < 3; i++) // diag two
             {
                 
-                    if (gameField[i, h] == playerId)
+                    if (GameField[i, h] == playerId)
                     {
-                        count++;
+                        Count++;
                     }
 
-                    if (count == 3)
+                    if (Count == 3)
                     {
-                    count = 0;
+                    Count = 0;
                     return true;
                     }
                 h--;

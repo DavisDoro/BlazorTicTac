@@ -13,8 +13,8 @@
             @for (int j = 0; j < 3; j++)
             {
                 int y = j;
-                <td @onclick="() => Logic.Mark(x, y, Logic.playerId)">
-                    <img src="icons/@(Logic.gameField[x, y]).png" />
+                <td @onclick="() => Logic.Mark(x, y, Logic.PlayerId)">
+                    <img src="icons/@(Logic.GameField[x, y]).png" />
                     </td>
             }
             </tr>
@@ -23,29 +23,24 @@
 </div>
 <br />
 
-<div class="card-subtitle">Next move player @Logic.playerId</div>
+<div class="card-subtitle">Next move player @Logic.PlayerId</div>
 <br />
 
 <button class="btn btn-primary" style="margin:10px;" @onclick="Logic.ConfirmMove"> Confirm</button>
 <button class="btn btn-danger" style="margin:10px;" @onclick="Logic.Reset">Reset</button>
 
-@if (Logic.invalidMove)
+@if (Logic.InvalidMove)
 {
     <div class="validation-message">
         Not valid move!
     </div>
 }
 
-@if(Logic.winner && Logic.playerId == 1) // declare winner
+@if(Logic.Winner) // declare winner
 {
     <div class="validation-message">
-        We have a winner! Player2 wins!
+        We have a winner! Player @Logic.PlayerId wins!
     </div>
 }
-else if(Logic.winner)
-{
-    <div class="validation-message">
-        We have a winner! Player1 wins!
-    </div>
-}
+
 </center>
