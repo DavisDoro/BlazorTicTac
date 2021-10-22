@@ -14,6 +14,7 @@
         public bool lastMove = false;
         int lastRow;
         int lastCol;
+        int count = 0;
 
         public void Mark(int row, int col, int playerId)  // validate and place your mark on board
         {
@@ -72,13 +73,19 @@
             };  
             winner = false;
         }
-
-        public bool HasWon(int playerId) // check for winner !! MIGHT be worth splitting in 3 seperate methods
+        public bool HasWon(int playerId) // check for winner
         {
-            int count = 0;
+            if (WinHorizontal(playerId) || WinVertical(playerId) || WinDiag(playerId))
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool WinHorizontal(int playerId)
+        {
             for (int i = 0; i < 3; i++) // horizontal check
             {
-                
+
                 for (int j = 0; j < 3; j++)
                 {
                     if (gameField[i, j] == playerId)
@@ -93,9 +100,14 @@
                 }
                 count = 0;
             }
+            return false;
+        }
+
+        public bool WinVertical(int playerId)
+        {
             for (int i = 0; i < 3; i++) // vertical check
             {
-                
+
                 for (int j = 0; j < 3; j++)
                 {
                     if (gameField[j, i] == playerId)
@@ -110,8 +122,12 @@
                 }
                 count = 0;
             }
-            // [0 0] [1 1] [2 2]
-            // [0 2] [1 1] [2 0]
+            return false;
+        }
+
+
+        public bool WinDiag(int playerId)
+        {
             for (int i = 0; i < 3; i++) //diag one
             {
                 if (gameField[i, i] == playerId)
@@ -126,6 +142,7 @@
             }
             int h = 2;
             count = 0;
+
             for (int i = 0; i < 3; i++) // diag two
             {
                 
