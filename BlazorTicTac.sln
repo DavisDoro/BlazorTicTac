@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31624.102
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31815.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorTicTac.Server", "BlazorTicTac\Server\BlazorTicTac.Server.csproj", "{34B882AE-D5B2-4F61-96B0-4B1678E1E0B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorTicTac.Server", "BlazorTicTac\Server\BlazorTicTac.Server.csproj", "{34B882AE-D5B2-4F61-96B0-4B1678E1E0B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorTicTac.Client", "BlazorTicTac\Client\BlazorTicTac.Client.csproj", "{A3FE6279-76FC-4B1D-8E42-F5DA4627BF3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorTicTac.Client", "BlazorTicTac\Client\BlazorTicTac.Client.csproj", "{A3FE6279-76FC-4B1D-8E42-F5DA4627BF3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorTicTac.Shared", "BlazorTicTac\Shared\BlazorTicTac.Shared.csproj", "{D0F1073D-94BB-4F02-A82C-5CDDCDC5FCD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorTicTac.Shared", "BlazorTicTac\Shared\BlazorTicTac.Shared.csproj", "{D0F1073D-94BB-4F02-A82C-5CDDCDC5FCD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

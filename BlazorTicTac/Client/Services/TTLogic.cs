@@ -1,4 +1,8 @@
-﻿namespace BlazorTicTac.Client.Services
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace BlazorTicTac.Client.Services
 {
     public class TTLogic
     {
@@ -6,6 +10,7 @@
         {
             PlayerId = 1;
         }
+        private readonly Random random = new Random();
         public int PlayerId { get; set; }
         public bool Winner { get; set; }
         public bool InvalidMove { get; set; }
@@ -17,9 +22,11 @@
         public int LastRow { get; set; }
         public int LastCol { get; set; }
         public int Count { get; set; } = 0;
+        public int AIrow { get; set; }
+        public int AIcol { get; set; }
+        public int AIMoveCount { get; set; } = 0;
 
-
-    public void Mark(int row, int col, int playerId)  // validate and place your mark on board
+        public void Mark(int row, int col, int playerId)  // validate and place your mark on board
         {
             if (Winner)
             {
@@ -42,7 +49,39 @@
             LastRow = row;   //obtain last selected cell
             LastCol = col;
         }
+        public int RandomNumber()
+        {
+            return random.Next(3);
+        }
+        public void MoveAI()
+        {
+            if (AIMoveCount == 4)
+            {
+                return;
+            }
+            if (HasWon(PlayerId))
+            {
+                Winner = true;
+                return;
+            }
 
+            if (Winner)
+            {
+                return;
+            }
+            Thread.Sleep(500);
+            do
+            {
+                AIrow = RandomNumber();
+                AIcol = RandomNumber();
+
+            } while (GameField[AIrow, AIcol] != 0);
+
+            GameField[AIrow, AIcol] = 2;
+            PlayerId = 2;
+            AIMoveCount++;
+            ConfirmMove();
+        }
         public void ConfirmMove() // confirm button
         {
             if (!LastMove)
@@ -66,6 +105,7 @@
             }
         }
 
+
         public void Reset() // reset game board
         {
             GameField = new int[3, 3] {
@@ -83,6 +123,17 @@
                 PlayerId= 1;
             }
         }
+        public void ResetAI() // reset game board
+        {
+            GameField = new int[3, 3] {
+            { 0, 0, 0 },
+            { 0, 0, 0, },
+            { 0, 0, 0, }
+            };
+            Winner = false;
+            PlayerId = 1;
+            AIMoveCount = 0;
+        }
         public bool HasWon(int playerId) // check for winner
         {
             if (WinHorizontal(playerId) || WinVertical(playerId) || WinDiag(playerId))
@@ -93,6 +144,7 @@
         }
         public bool WinHorizontal(int playerId)
         {
+            Count = 0;
             for (int i = 0; i < 3; i++) // horizontal check
             {
 
@@ -168,6 +220,7 @@
                     }
                 h--;
             }
+            Count = 0;
             return false;
         }
     }

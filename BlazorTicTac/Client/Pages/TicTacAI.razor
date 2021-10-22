@@ -1,9 +1,9 @@
-﻿@page "/tictac"
+﻿@page "/tictacAI"
 @inject TTLogic Logic
 
 
 <center>
-    <h3>Player vs Player</h3>
+    <h3>Play against Computer</h3>
 <div class="board">
     <table style="max-width:320px;">
     @for (int i = 0; i < 3; i++)
@@ -26,8 +26,8 @@
 <div class="card-subtitle">Next move player @Logic.PlayerId</div>
 <br />
 
-<button class="btn btn-primary" style="margin:10px;" @onclick="Logic.ConfirmMove"> Confirm</button>
-<button class="btn btn-danger" style="margin:10px;" @onclick="Logic.Reset">Reset</button>
+<button class="btn btn-primary" style="margin:10px;" @onclick="Logic.MoveAI"> Confirm</button>
+<button class="btn btn-danger" style="margin:10px;" @onclick="Logic.ResetAI">Reset</button>
 
 @if (Logic.InvalidMove)
 {
@@ -36,11 +36,18 @@
     </div>
 }
 
-@if(Logic.Winner) // declare winner
+@if(Logic.Winner && Logic.PlayerId == 1) // declare winner
 {
-    <div class="validation-message">
-        Player @Logic.PlayerId wins!
-    </div>
-}
+            <div class="validation-message">
+                Congrats, you beat the AI!
+        </div>
+
+    }
+    else if(Logic.Winner)
+    {
+        <div class="validation-message">
+                Game over. AI won.
+        </div>
+    }
 
 </center>
