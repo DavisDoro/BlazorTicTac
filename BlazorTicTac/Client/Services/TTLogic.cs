@@ -43,7 +43,7 @@ namespace BlazorTicTac.Client.Services
 
             GameField[row, col] = playerId;
 
-            LastMove = true;    
+            LastMove = true;
             InvalidMove = false;
 
             LastRow = row;   //obtain last selected cell
@@ -64,18 +64,26 @@ namespace BlazorTicTac.Client.Services
                 Winner = true;
                 return;
             }
-
             if (Winner)
             {
                 return;
             }
             Thread.Sleep(500);
-            do
-            {
-                AIrow = RandomNumber();
-                AIcol = RandomNumber();
 
-            } while (GameField[AIrow, AIcol] != 0);
+            if (BlockMoveAI())
+            {
+
+            }
+            else
+            {
+                do
+                {
+                    AIrow = RandomNumber();
+                    AIcol = RandomNumber();
+
+                } while (GameField[AIrow, AIcol] != 0);
+            }
+
 
             GameField[AIrow, AIcol] = 2;
             PlayerId = 2;
@@ -112,7 +120,7 @@ namespace BlazorTicTac.Client.Services
             { 0, 0, 0 },
             { 0, 0, 0, },
             { 0, 0, 0, }
-            };  
+            };
             Winner = false;
             if (PlayerId == 1)
             {
@@ -120,7 +128,7 @@ namespace BlazorTicTac.Client.Services
             }
             else
             {
-                PlayerId= 1;
+                PlayerId = 1;
             }
         }
         public void ResetAI() // reset game board
@@ -164,7 +172,6 @@ namespace BlazorTicTac.Client.Services
             }
             return false;
         }
-
         public bool WinVertical(int playerId)
         {
             for (int i = 0; i < 3; i++) // vertical check
@@ -186,8 +193,6 @@ namespace BlazorTicTac.Client.Services
             }
             return false;
         }
-
-
         public bool WinDiag(int playerId)
         {
             for (int i = 0; i < 3; i++) //diag one
@@ -207,21 +212,166 @@ namespace BlazorTicTac.Client.Services
 
             for (int i = 0; i < 3; i++) // diag two
             {
-                
-                    if (GameField[i, h] == playerId)
-                    {
-                        Count++;
-                    }
 
-                    if (Count == 3)
-                    {
+                if (GameField[i, h] == playerId)
+                {
+                    Count++;
+                }
+
+                if (Count == 3)
+                {
                     Count = 0;
                     return true;
-                    }
+                }
                 h--;
             }
             Count = 0;
             return false;
         }
+
+
+
+        //---- More advanced AI moves ----//
+        public bool BlockMoveAI() // check for winner
+        {
+            if (BlockHorizontalAI() || BlockVerticalAI() || BlockDiagAI())
+            {
+                return true;
+            }
+            return false;
+
+        }
+
+        public bool BlockHorizontalAI()
+        {
+            Count = 0;
+            for (int i = 0; i < 3; i++) // horizontal check
+            {
+
+                for (int j = 0; j < 3; j++)
+                {
+                    if
+                            (GameField[i, j] == 1)
+                    {
+                        Count++;
+                    }
+                    if (Count == 2)
+                    {
+                        Count = 0;
+                        return MegaBrainHorizontalAI(i);
+
+                    }
+                }
+                Count = 0;
+            }
+            return false;
+        }
+
+        public bool BlockVerticalAI()
+        {
+            for (int i = 0; i < 3; i++) // vertical check
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (GameField[j, i] == 1)
+                    {
+                        Count++;
+                    }
+                    if (Count == 2)
+                    {
+                        Count = 0;
+                        return MegaBrainVerticalAI(i);
+                    }
+                }
+                Count = 0;
+            }
+            return false;
+        }
+        public bool BlockDiagAI()
+        {
+            for (int i = 0; i < 3; i++) //diag one
+            {
+                if (GameField[i, i] == 1)
+                {
+                    Count++;
+                }
+                if (Count == 2)
+                {
+                    Count = 0;
+                    return MegaBrainDiagOneAI();
+                }
+            }
+            int h = 2;
+            Count = 0;
+
+            for (int i = 0; i < 3; i++) // diag two
+            {
+
+                if (GameField[i, h] == 1)
+                {
+                    Count++;
+                }
+                if (Count == 2)
+                {
+                    Count = 0;
+                    return MegaBrainDiagTwoAI();
+                }
+
+                h--;
+            }
+            Count = 0;
+            return false;
+        }
+        public bool MegaBrainHorizontalAI(int blockThis)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (GameField[blockThis, i] == 0)
+                {
+                    GameField[blockThis, i] = 2;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool MegaBrainVerticalAI(int blockThis)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (GameField[i, blockThis] == 0)
+                {
+                    GameField[i, blockThis] = 2;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool MegaBrainDiagOneAI()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (GameField[i, i] == 0)
+                {
+                    GameField[i, i] = 2;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool MegaBrainDiagTwoAI()
+        {
+            int h = 2;
+            for (int i = 0; i < 3; i++)
+            {
+                if (GameField[i, h] == 0)
+                {
+                    GameField[i, h] = 2;
+                    return true;
+                }
+                h--;
+            }
+            return false;
+        }
+
     }
 }
