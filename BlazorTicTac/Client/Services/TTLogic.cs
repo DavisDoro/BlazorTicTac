@@ -55,17 +55,13 @@ namespace BlazorTicTac.Client.Services
         }
         public void MoveAI()
         {
-            if (AIMoveCount == 4)
+            if (AIMoveCount == 4 || Winner)
             {
                 return;
             }
             if (HasWon(PlayerId))
             {
                 Winner = true;
-                return;
-            }
-            if (Winner)
-            {
                 return;
             }
             Thread.Sleep(500);
@@ -121,6 +117,7 @@ namespace BlazorTicTac.Client.Services
             { 0, 0, 0, },
             { 0, 0, 0, }
             };
+
             Winner = false;
             if (PlayerId == 1)
             {
@@ -155,7 +152,6 @@ namespace BlazorTicTac.Client.Services
             Count = 0;
             for (int i = 0; i < 3; i++) // horizontal check
             {
-
                 for (int j = 0; j < 3; j++)
                 {
                     if (GameField[i, j] == playerId)
@@ -232,7 +228,7 @@ namespace BlazorTicTac.Client.Services
 
 
         //---- More advanced AI moves ----//
-        public bool BlockMoveAI() // check for winner
+        public bool BlockMoveAI() // Check if blocking is possible
         {
             if (BlockHorizontalAI() || BlockVerticalAI() || BlockDiagAI())
             {
@@ -259,7 +255,6 @@ namespace BlazorTicTac.Client.Services
                     {
                         Count = 0;
                         return MegaBrainHorizontalAI(i);
-
                     }
                 }
                 Count = 0;
