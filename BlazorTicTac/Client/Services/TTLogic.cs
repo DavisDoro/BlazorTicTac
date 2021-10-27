@@ -6,13 +6,11 @@ namespace BlazorTicTac.Client.Services
 {
     public class TTLogic
     {
-        public TTLogic()
+        public TTLogic(TTBoard board)
         {
-            this.Board = board;
-            this.Bot = bot;
+           this.Board = board;
         }
         public TTBoard Board { get; set; }
-        public AILogic Bot { get; set; }
 
         public bool Winner { get; set; }
         public bool InvalidMove { get; set; }
@@ -22,7 +20,17 @@ namespace BlazorTicTac.Client.Services
         public bool LastMove { get; set; }
 
         TTBoard board = new TTBoard();
-        AILogic bot = new AILogic();
+
+        public void Mark(int x, int y, int playerID)  // validate and place your mark on board
+        {
+            if (Board.Winner || !(Board.GameField[x, y]).Equals("empty")) // if is winner or field is already in use - do nothing
+            {
+                return;
+            }
+            UndoLastMove();  // Undo previous move if player chose another field on board
+            Board.InsertValue(x, y, playerID);
+            ObtainMarkValues(x, y);
+        }
 
         public void ConfirmMove() // confirm button
         {
@@ -32,23 +40,14 @@ namespace BlazorTicTac.Client.Services
                 return;
             }
             LastMove = false;
-            if (Winner)
+            HasWon(Board.PlayerID);
+            if (Board.Winner)
             {
                 return;
             }
-            board.PlayerID = (++Board.PlayerID) % 2; // swap players
+            Board.PlayerID = (++Board.PlayerID) % 2; // swap players
         }
-        public void Mark(int x, int y, int playerID)  // validate and place your mark on board
-        {
-            //
-            //if (Winner || !String.IsNullOrEmpty(Board.GameField[x, y])) // if is winner or field is already in use - do nothing
-            //{
-            //    return;
-            //}
-            UndoLastMove();  // Undo previous move if player chose another field on board
-            Board.InsertValue(x, y, playerID);
-            ObtainMarkValues(x, y);
-        }
+
         public void UndoLastMove() // Undo previous move if player chose another field on board
         {
             if (LastMove) 
@@ -56,6 +55,7 @@ namespace BlazorTicTac.Client.Services
                 Board.InsertValue(LastRow, LastCol, 2);
             }
         }
+
         public void ObtainMarkValues(int x, int y) 
         {
             LastMove = true;
@@ -63,22 +63,22 @@ namespace BlazorTicTac.Client.Services
             LastRow = x;   //save last selected cell
             LastCol = y;
         }
+
         public void HasWon(int playerId) // check for winner
         {
-            if (WinHorizontal(playerId) || WinVertical(playerId) || WinDiag(playerId))
+            if (WinHorizontal(playerId, Board.GameField) || WinVertical(playerId) || WinDiag(playerId, Board.GameField))
             {
                 Board.Winner = true;
             }
-
         }
-        public bool WinHorizontal(int playerId)
+
+        public bool WinHorizontal(int playerId, string[,] gameField)
         {
-            Count = 0;
             for (int i = 0; i < 3; i++) // horizontal check
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (board.GameField[i, j] == ((PlayerPiece)playerId).ToString())
+                    if (gameField[i, j] == ((PlayerPiece)playerId).ToString())
                     {
                         Count++;
                     }
@@ -92,14 +92,14 @@ namespace BlazorTicTac.Client.Services
             }
             return false;
         }
+
         public bool WinVertical(int playerId)
         {
             for (int i = 0; i < 3; i++) // vertical check
             {
-
                 for (int j = 0; j < 3; j++)
                 {
-                    if (board.GameField[j, i] == ((PlayerPiece)playerId).ToString())
+                    if (Board.GameField[j, i] == ((PlayerPiece)playerId).ToString())
                     {
                         Count++;
                     }
@@ -113,17 +113,17 @@ namespace BlazorTicTac.Client.Services
             }
             return false;
         }
-        public bool WinDiag(int playerId)
+
+        public bool WinDiag(int playerId, string[,] gameField)
         {
             for (int i = 0; i < 3; i++) //diag one
             {
-                if (board.GameField[i, i] == ((PlayerPiece)playerId).ToString())
+                if (gameField[i, i] == ((PlayerPiece)playerId).ToString())
                 {
                     Count++;
                 }
                 if (Count == 3)
                 {
-                    Count = 0;
                     return true;
                 }
             }
@@ -132,15 +132,13 @@ namespace BlazorTicTac.Client.Services
 
             for (int i = 0; i < 3; i++) // diag two
             {
-
-                if (board.GameField[i, h] == ((PlayerPiece)playerId).ToString())
+                if (gameField[i, h] == ((PlayerPiece)playerId).ToString())
                 {
                     Count++;
                 }
 
                 if (Count == 3)
                 {
-                    Count = 0;
                     return true;
                 }
                 h--;
@@ -148,8 +146,6 @@ namespace BlazorTicTac.Client.Services
             Count = 0;
             return false;
         }
-
-
 
         ////---- More advanced AI moves ----//
         //public bool BlockMoveAI() // Check if blocking is possible
