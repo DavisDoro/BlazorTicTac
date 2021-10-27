@@ -1,5 +1,6 @@
 ﻿@page "/tictac"
 @inject TTLogic Logic
+@inject TTBoard Board
 
 
 <center>
@@ -13,8 +14,8 @@
             @for (int j = 0; j < 3; j++)
             {
                 int y = j;
-                <td @onclick="() => Logic.Mark(x, y, Logic.PlayerId)">
-                    <img src="icons/@(Logic.GameField[x, y]).png" />
+                <td @onclick="() => Board.Mark(x, y, Board.PlayerID)">
+                    <img src="icons/icon@(Board.GameField[x, y]).png" />
                     </td>
             }
             </tr>
@@ -23,24 +24,24 @@
 </div>
 <br />
 
-<div class="card-subtitle">Next move player @Logic.PlayerId</div>
+<div class="card-subtitle">Next move player @((PlayerPiece)Board.PlayerID)</div>
 <br />
 
-<button class="btn btn-primary" style="margin:10px;" @onclick="Logic.ConfirmMove"> Confirm</button>
-<button class="btn btn-danger" style="margin:10px;" @onclick="Logic.Reset">Reset</button>
+<button class="btn btn-primary" style="margin:10px;" @onclick="Board.ConfirmMove"> Confirm</button>
+<button class="btn btn-danger" style="margin:10px;" @onclick="Board.Reset">Reset</button>
 
-@if (Logic.InvalidMove)
+@if (Board.InvalidMove)
 {
     <div class="validation-message">
         Not valid move!
     </div>
 }
 
-@if(Logic.Winner) // declare winner
+@if(Board.Winner) // declare winner
 {
-    <div class="validation-message">
-        Player @Logic.PlayerId wins!
-    </div>
+<div class="validation-message">
+    Player @((PlayerPiece)Board.PlayerID) wins!
+</div>
 }
 
 </center>
