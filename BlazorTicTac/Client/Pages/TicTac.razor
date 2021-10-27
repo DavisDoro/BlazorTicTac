@@ -14,7 +14,7 @@
             @for (int j = 0; j < 3; j++)
             {
                 int y = j;
-                <td @onclick="() => Board.Mark(x, y, Board.PlayerID)">
+                <td @onclick="() => Logic.Mark(x, y, Board.PlayerID)">
                     <img src="icons/icon@(Board.GameField[x, y]).png" />
                     </td>
             }
@@ -27,10 +27,10 @@
 <div class="card-subtitle">Next move player @((PlayerPiece)Board.PlayerID)</div>
 <br />
 
-<button class="btn btn-primary" style="margin:10px;" @onclick="Board.ConfirmMove"> Confirm</button>
+<button class="btn btn-primary" style="margin:10px;" @onclick="Logic.ConfirmMove"> Confirm</button>
 <button class="btn btn-danger" style="margin:10px;" @onclick="Board.Reset">Reset</button>
 
-@if (Board.InvalidMove)
+@if (Logic.InvalidMove)
 {
     <div class="validation-message">
         Not valid move!

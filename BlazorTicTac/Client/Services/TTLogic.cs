@@ -17,10 +17,52 @@ namespace BlazorTicTac.Client.Services
         public bool Winner { get; set; }
         public bool InvalidMove { get; set; }
         public int Count { get; set; } = 0;
+        public int LastCol { get; set; }
+        public int LastRow { get; set; }
+        public bool LastMove { get; set; }
 
         TTBoard board = new TTBoard();
         AILogic bot = new AILogic();
 
+        public void ConfirmMove() // confirm button
+        {
+            if (!LastMove)
+            {
+                InvalidMove = true;
+                return;
+            }
+            LastMove = false;
+            if (Winner)
+            {
+                return;
+            }
+            board.PlayerID = (++Board.PlayerID) % 2; // swap players
+        }
+        public void Mark(int x, int y, int playerID)  // validate and place your mark on board
+        {
+            //
+            //if (Winner || !String.IsNullOrEmpty(Board.GameField[x, y])) // if is winner or field is already in use - do nothing
+            //{
+            //    return;
+            //}
+            UndoLastMove();  // Undo previous move if player chose another field on board
+            Board.InsertValue(x, y, playerID);
+            ObtainMarkValues(x, y);
+        }
+        public void UndoLastMove() // Undo previous move if player chose another field on board
+        {
+            if (LastMove) 
+            {
+                Board.InsertValue(LastRow, LastCol, 2);
+            }
+        }
+        public void ObtainMarkValues(int x, int y) 
+        {
+            LastMove = true;
+            InvalidMove = false;
+            LastRow = x;   //save last selected cell
+            LastCol = y;
+        }
         public void HasWon(int playerId) // check for winner
         {
             if (WinHorizontal(playerId) || WinVertical(playerId) || WinDiag(playerId))

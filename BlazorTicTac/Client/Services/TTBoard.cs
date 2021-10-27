@@ -33,6 +33,7 @@ namespace BlazorTicTac.Client.Services
         public void Move()
         {
             GameField[0, 0] = ((PlayerPiece)PlayerID).ToString();
+
         }
         public void Reset() // reset game board
         {
@@ -54,6 +55,11 @@ namespace BlazorTicTac.Client.Services
             Winner = false;
             PlayerID = 0;
             AIMoveCount = 0;
+        }
+        public void InsertValue(int x, int y, int playerID)
+        {
+            GameField[x, y] = ((PlayerPiece)playerID).ToString();
+            Console.WriteLine($"Inserted on {x}, {y} player {playerID}");
         }
         public void Mark(int row, int col, int playerId)  // validate and place your mark on board
         {
